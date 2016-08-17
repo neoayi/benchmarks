@@ -60,7 +60,7 @@ namespace Benchmarks.Data
         DbCommand CreateReadCommand(DbConnection connection)
         {
             var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT [Id], [RandomNumber] FROM [World] WHERE [Id] = @Id";
+            cmd.CommandText = "SELECT Id, RandomNumber FROM World WHERE Id = @Id";
             var id = cmd.CreateParameter();
             id.ParameterName = "@Id";
             id.DbType = DbType.Int32;
@@ -138,7 +138,7 @@ namespace Benchmarks.Data
             using (var db = _dbProviderFactory.CreateConnection())
             using (var cmd = db.CreateCommand())
             {
-                cmd.CommandText = "SELECT [Id], [Message] FROM [Fortune]";
+                cmd.CommandText = "SELECT Id, Message FROM Fortune";
 
                 db.ConnectionString = _connectionString;
                 await db.OpenAsync();

@@ -27,9 +27,16 @@ namespace Benchmarks.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var extension = GetOrCreateExtension(optionsBuilder);
-            extension.ConnectionString = _appSettings.ConnectionString;
-            ((IDbContextOptionsBuilderInfrastructure)optionsBuilder).AddOrUpdateExtension(extension);
+            if (_appSettings.Database == "postgresql")
+            {
+                optionsBuilder.UseNpgsql(_appSettings.ConnectionString);
+            }
+            else
+            {
+                var extension = GetOrCreateExtension(optionsBuilder);
+                extension.ConnectionString = _appSettings.ConnectionString;
+                ((IDbContextOptionsBuilderInfrastructure)optionsBuilder).AddOrUpdateExtension(extension);
+            }
         }
 
         private static SqlServerOptionsExtension GetOrCreateExtension(DbContextOptionsBuilder optionsBuilder)
