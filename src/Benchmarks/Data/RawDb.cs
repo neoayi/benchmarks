@@ -27,22 +27,15 @@ namespace Benchmarks.Data
         public async Task<World> LoadSingleQueryRow()
         {
             using (var db = _dbProviderFactory.CreateConnection())
+            using (var cmd = CreateReadCommand(db))
             {
                 db.ConnectionString = _connectionString;
                 await db.OpenAsync();
 
-                return await ReadSingleRow(db);
+                return await ReadSingleRow(db, cmd);
             }
         }
-
-        Task<World> ReadSingleRow(DbConnection connection)
-        {
-            using (var cmd = CreateReadCommand(connection))
-            {
-                return ReadSingleRow(connection, cmd);
-            }
-        }
-
+        
         async Task<World> ReadSingleRow(DbConnection connection, DbCommand cmd)
         {
             using (var rdr = await cmd.ExecuteReaderAsync(CommandBehavior.SingleRow))
